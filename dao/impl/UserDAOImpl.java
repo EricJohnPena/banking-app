@@ -41,7 +41,7 @@ public class UserDAOImpl implements UserDAO {
                     rs.getString("name"),
                     rs.getString("email"),
                     rs.getString("number"),
-                    rs.getInt("pin")
+                    rs.getString("pin")
                 ));
             }
             System.out.println("Users retrieved successfully.");

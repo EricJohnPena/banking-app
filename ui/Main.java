@@ -73,7 +73,8 @@ public class Main {
                     } 
                     break;
                 case 2:
-                   //consoleInput.handleRegister(scanner);
+
+                   //User user = auth.register()
                     break;
                 case 3:
                     System.out.println("Thank you for using the system.");
