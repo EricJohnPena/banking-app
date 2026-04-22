@@ -18,6 +18,10 @@ public class Main {
             AuthServiceImpl auth = new AuthServiceImpl(userDAO);
 
             System.out.println("Welcome to bank.");
+            System.out.println("Enter name: ");
+            String nameInput = scanner.next();
+            System.out.println("Enter email: ");
+            String emailInput = scanner.next();
             System.out.println("Enter mobile number: ");
             String mobileInput = scanner.next();
             System.out.println("Enter PIN: ");
@@ -25,6 +29,7 @@ public class Main {
 
             try {
                 User user = auth.login(mobileInput, pinInput);
+                //User user = auth.register(nameInput, emailInput, mobileInput, pinInput);
                 if (user != null) {
                     System.out.println("Welcome, " + user.getName() + "!");
                 }

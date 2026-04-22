@@ -81,9 +81,5 @@ public class UserDAOImpl implements UserDAO {
         // Implementation for changing user pin
     }
 
-    @Override
-    public void logout(int userId) {
-        // Implementation for user logout
-    }
 
 }
