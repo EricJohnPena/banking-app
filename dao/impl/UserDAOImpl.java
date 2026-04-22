@@ -12,20 +12,55 @@ public class UserDAOImpl implements UserDAO {
         this.conn = conn;
     }
     @Override
-    public User createUser(String name, String email, String number, String pin) {
-        String sql = "INSERT into users (name, email, number, pin) VALUES (?,?,?,?)";
-        try{
-            PreparedStatement stmt = conn.prepareStatement(sql);
+    public void createUser(String name, String email, String number, String pin) {
+
+        double BALANCE = 0.0;
+
+        String sql = "INSERT INTO users (name, email, number, pin) VALUES (?, ?, ?, ?)";
+        String sql2 = "INSERT INTO account (balance, fk_user_id) VALUES (?, ?)";
+
+        try {
+            // Start transaction
+            conn.setAutoCommit(false);
+
+            //  Get generated ID
+            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
             stmt.setString(1, name);
             stmt.setString(2, email);
             stmt.setString(3, number);
             stmt.setString(4, pin);
+
             stmt.executeUpdate();
-            System.out.println("User created successfully.");
+
+            ResultSet rs = stmt.getGeneratedKeys();
+
+            int userID = -1;
+            if (rs.next()) {
+                userID = rs.getInt(1);
+            } else {
+                throw new SQLException("Creating user failed, no ID obtained.");
+            }
+
+            //Insert into account using the generated userID
+            PreparedStatement stmt2 = conn.prepareStatement(sql2);
+            stmt2.setDouble(1, BALANCE);
+            stmt2.setInt(2, userID);
+            stmt2.executeUpdate();
+
+            //Commit both inserts together
+            conn.commit();
+
+            System.out.println("User and account created successfully.");
+
         } catch (SQLException e) {
+            try {
+                conn.rollback(); // rollback if anything fails
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
         }
-                return null;
     }
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
@@ -61,14 +96,14 @@ public class UserDAOImpl implements UserDAO {
             stmt.setString(1, number);
             stmt.setString(2, pin);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()){
-                return new User(
-                    rs.getInt("ID"),
-                    rs.getString("name"),
+
+            return new User(
+                    rs.getInt("id"),
+                    rs.getString("username"),
                     rs.getString("email"),
                     rs.getString("number"),
                     rs.getString("pin"));
-            }
+
         } catch (SQLException e) {
             System.out.println("Invalid mobile number or PIN.");
         }

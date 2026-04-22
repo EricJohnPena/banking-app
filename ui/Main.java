@@ -17,7 +17,7 @@ public class Main {
         try {
             Connection conn = DBConnection.getConnection();
             UserDAO userDAO = new UserDAOImpl(conn);
-            AuthServiceImpl auth = new AuthServiceImpl(userDAO);
+            UserAuthenticationImpl auth = new UserAuthenticationImpl(userDAO);
 
             do {
             showMenu();
@@ -59,6 +59,7 @@ public class Main {
                                         break;
                                     case 7:
                                         System.out.println("logout");
+                                        auth.logout(user);
                                         isContinue = false;
                                         break;
                                  

@@ -1,0 +1,15 @@
+create table account (
+id SERIAL PRIMARY KEY,
+balance DOUBLE PRECISION,
+fk_user_id INTEGER NOT NULL,
+CONSTRAINT fk_user
+FOREIGN KEY(fk_user_id)
+REFERENCES users(id)
+ON DELETE CASCADE);
+
+create table users (
+id SERIAL PRIMARY KEY,
+username TEXT NOT NULL,
+email TEXT,
+number TEXT UNIQUE,
+pin TEXT NOT NULL);
