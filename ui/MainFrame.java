@@ -3,8 +3,9 @@ import model.User;
 import javax.swing.*;
 
 public class MainFrame extends JFrame {
-
+    private User currentUser;
     public MainFrame() {
+
         setTitle("Simple Swing App");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -13,6 +14,13 @@ public class MainFrame extends JFrame {
         showLogin();
 
         setVisible(true);
+    }
+    public void setUser(User currentUser){
+        this.currentUser = currentUser;
+    }
+    public void logout(User user){
+        setUser(user);
+        showLogin();
     }
 
     public void showLogin() {
@@ -23,7 +31,8 @@ public class MainFrame extends JFrame {
     }
 
     public void showDashboard(User user) {
-        Dashboard dashboardForm = new Dashboard(user);
+        Dashboard dashboardForm = new Dashboard(this, user);
+        //setSize(500, 600);
         setContentPane(dashboardForm.getPanel());
         revalidate();
         repaint();
@@ -36,4 +45,5 @@ public class MainFrame extends JFrame {
         revalidate();
         repaint();
     }
+
 }

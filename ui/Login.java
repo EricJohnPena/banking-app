@@ -35,6 +35,7 @@ public class Login {
                     User user = auth.login(numberInput,pinInput);
                     if (user != null) {
                         JOptionPane.showMessageDialog(panel, "Login Successful!");
+                        mainFrame.setUser(user);
                         mainFrame.showDashboard(user);
                     } else {
                         JOptionPane.showMessageDialog(panel, "Invalid Credentials!");
