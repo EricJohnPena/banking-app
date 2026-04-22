@@ -3,13 +3,13 @@ package model;
 import java.util.Date;
 
 public class Transaction {
-    int id;
-    double amount;
-    String name;
-    int accountID;
-    Date date;
-    int transferToID;
-    int transferFromID;
+    private int id;
+    private double amount;
+    private String name;
+    private int accountID;
+    private Date date;
+    private int transferToID;
+    private int transferFromID;
     
     public Transaction(int id, double amount, String name, int accountID, Date date, int transferToID,
             int transferFromID) {

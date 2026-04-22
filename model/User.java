@@ -1,11 +1,11 @@
 package model;
 
 public class User {
-    int id;
-    String name;
-    String email;
-    String number;
-    int pin;
+    private int id;
+    private String name;
+    private String email;
+    private String number;
+    private int pin;
 
     
     public User(int id, String name, String email, String number, int pin) {
