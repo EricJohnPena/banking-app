@@ -13,10 +13,10 @@ public class UserAuthenticationImpl implements UserAuthentication {
     public User login(String number, String pin){
        User user = userDAO.findUser(number, pin);
        if (user != null) {
-           System.out.println("Login successful for user: " + user.getName());
+           System.out.println("LoginForm successful for user: " + user.getName());
            return user;
        } else {
-           System.out.println("Login failed. Invalid number or PIN.");
+           System.out.println("LoginForm failed. Invalid number or PIN.");
            return null;
        }
     }

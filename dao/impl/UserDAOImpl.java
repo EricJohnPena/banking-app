@@ -16,7 +16,7 @@ public class UserDAOImpl implements UserDAO {
 
         double BALANCE = 0.0;
 
-        String sql = "INSERT INTO users (name, email, number, pin) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO users (username, email, number, pin) VALUES (?, ?, ?, ?)";
         String sql2 = "INSERT INTO account (balance, fk_user_id) VALUES (?, ?)";
 
         try {
@@ -73,7 +73,7 @@ public class UserDAOImpl implements UserDAO {
             while (rs.next()) {
                 users.add(new User(
                     rs.getInt("id"),
-                    rs.getString("name"),
+                    rs.getString("username"),
                     rs.getString("email"),
                     rs.getString("number"),
                     rs.getString("pin")
@@ -97,12 +97,16 @@ public class UserDAOImpl implements UserDAO {
             stmt.setString(2, pin);
             ResultSet rs = stmt.executeQuery();
 
-            return new User(
-                    rs.getInt("id"),
-                    rs.getString("username"),
-                    rs.getString("email"),
-                    rs.getString("number"),
-                    rs.getString("pin"));
+            if (rs.next()) {
+                return new User(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("email"),
+                        rs.getString("number"),
+                        rs.getString("pin"));
+            } else {
+                return null;
+            }
 
         } catch (SQLException e) {
             System.out.println("Invalid mobile number or PIN.");
