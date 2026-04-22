@@ -11,33 +11,83 @@ import util.DBConnection;
 public class Main {
     public static void main(String[] args) throws SQLException {
         Scanner scanner = new Scanner(System.in);
+        int choice;
+        int userChoice;
         
         try {
             Connection conn = DBConnection.getConnection();
             UserDAO userDAO = new UserDAOImpl(conn);
             AuthServiceImpl auth = new AuthServiceImpl(userDAO);
 
-            System.out.println("Welcome to bank.");
-            System.out.println("Enter name: ");
-            String nameInput = scanner.next();
-            System.out.println("Enter email: ");
-            String emailInput = scanner.next();
-            System.out.println("Enter mobile number: ");
-            String mobileInput = scanner.next();
-            System.out.println("Enter PIN: ");
-            int pinInput = scanner.nextInt();
+            do {
+            showMenu();
+            choice = scanner.nextInt();
 
-            try {
-                User user = auth.login(mobileInput, pinInput);
-                //User user = auth.register(nameInput, emailInput, mobileInput, pinInput);
-                if (user != null) {
-                    System.out.println("Welcome, " + user.getName() + "!");
-                }
-            } catch (Exception e) {
-                System.out.println("Invalid mobile number or PIN.");
-            } finally {
-                scanner.close();
+            switch (choice) {
+                case 1:
+                    System.out.println("\n--- LOGIN ---");
+                    System.out.print("Enter mobile number: ");
+                    String mobileInput = scanner.next();
+                    System.out.print("Enter PIN: ");
+                    String pinInput = scanner.next();
+                    try {
+                        User user = auth.login(mobileInput, pinInput);
+                        if (user != null) {
+                             boolean isContinue = true;
+                             while(isContinue){
+                                 showUserMenu(user.getName());
+                                 userChoice = scanner.nextInt();
+                                 // Handle user choices
+                                 switch (userChoice) {
+                                    case 1:
+                                        System.out.println("Check balnace");
+                                        break;
+                                    case 2:
+                                        System.out.println("widraw");
+                                        break;
+                                    case 3:
+                                        System.out.println("deposit");
+                                        break;
+                                    case 4:
+                                        System.out.println("treansfer");
+                                        break;
+                                    case 5:
+                                        System.out.println("transactions");
+                                        break;
+                                    case 6:
+                                        System.out.println("change pin");
+                                        break;
+                                    case 7:
+                                        System.out.println("logout");
+                                        isContinue = false;
+                                        break;
+                                 
+                                    default:
+                                        break;
+                                 }
+                             };
+
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Invalid mobile number or PIN.");
+                    } 
+                    break;
+                case 2:
+                   //consoleInput.handleRegister(scanner);
+                    break;
+                case 3:
+                    System.out.println("Thank you for using the system.");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Try again.");
             }
+
+        } while (choice != 3);
+
+        scanner.close();
+    
+
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -50,9 +100,25 @@ public class Main {
         //         System.out.println("User: " + user.getName() + ", Email: " + user.getEmail());
         //     });
 
-        
-
-        
-
+    }
+    public static void showMenu() {
+        System.out.println("\nWelcome to Bank System");
+        System.out.println("----------------------");
+        System.out.println("1. Login");
+        System.out.println("2. Register");
+        System.out.println("3. Exit");
+        System.out.print("Enter your choice: ");
+    }
+    public static void showUserMenu(String name) {
+        System.out.println("\nWelcome "+ name);
+        System.out.println("----------------------");
+        System.out.println("1. Check Balance");
+        System.out.println("2. Widraw");
+        System.out.println("3. Deposit");
+        System.out.println("4. Transfer Money");
+        System.out.println("5. View Transactions");
+        System.out.println("6. Change Pin");
+        System.out.println("7. Logout");
+        System.out.print("Enter your choice: ");
     }
 }

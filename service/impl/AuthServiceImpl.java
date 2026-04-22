@@ -10,7 +10,7 @@ public class AuthServiceImpl implements AuthService{
         this.userDAO = userDAO;
     }
 
-    public User login(String number, int pin){
+    public User login(String number, String pin){
        User user = userDAO.findUser(number, pin);
        if (user != null) {
            System.out.println("Login successful for user: " + user.getName());
@@ -21,14 +21,21 @@ public class AuthServiceImpl implements AuthService{
        }
     }
 
-    public User register(String name, String email, String number, int pin){
+    public User register(String name, String email, String number, String pin){
         User user = userDAO.createUser(name, email, number, pin);
         if (user != null) {
            System.out.println("Register successful for new user: " + user.getName());
            return user;
        } else {
-           System.out.println("Login failed. Invalid number or PIN.");
+           System.out.println("Register failed. Invalid number or PIN.");
            return null;
        }
+    }
+
+    public void changePin(User user, String newPin) {
+       if (user.isValidPin(newPin))
+        userDAO.updatePin(user, newPin);
+       else
+        System.out.println("Invalid PIN input");
     }
 }

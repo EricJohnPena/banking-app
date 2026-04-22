@@ -5,10 +5,10 @@ public class User {
     private String name;
     private String email;
     private String number;
-    private int pin;
+    private String pin;
 
     
-    public User(int id, String name, String email, String number, int pin) {
+    public User(int id, String name, String email, String number, String pin) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -36,12 +36,16 @@ public class User {
     public void setNumber(String number) {
         this.number = number;
     }
-    public int getPin() {
+    public String getPin() {
         return pin;
     }
-    public void setPin(int pin) {
+    public void setPin(String pin) {
         this.pin = pin;
     }
+    public boolean isValidPin(String pin) {
+    // Check if exactly 4 digits and all are numeric
+    return pin != null && pin.matches("\\d{4}");
+}
 
     
 }
