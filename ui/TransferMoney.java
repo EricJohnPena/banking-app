@@ -1,10 +1,5 @@
-import dao.AccountDAO;
-import dao.TransactionDAO;
-import dao.UserDAO;
-import dao.impl.AccountDAOImpl;
-import dao.impl.TransactionDAOImpl;
-import dao.impl.UserDAOImpl;
-import model.Accounts;
+import dao.*;
+import dao.impl.*;
 import model.User;
 import service.CashTransfer;
 import util.DBConnection;

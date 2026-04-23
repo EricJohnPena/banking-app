@@ -5,21 +5,21 @@ import java.util.Date;
 public class Transaction {
     private int id;
     private double amount;
-    private String name;
+    private String type;
     private int accountID;
     private Date date;
-    private int transferToID;
-    private int transferFromID;
+    private String transferToNumber;
+    private String transferFromNumber;
     
-    public Transaction(int id, double amount, String name, int accountID, Date date, int transferToID,
-            int transferFromID) {
+    public Transaction(int id, double amount, String type, int accountID, Date date, String transferToNumber,
+                       String transferFromNumber) {
         this.id = id;
         this.amount = amount;
-        this.name = name;
+        this.type = type;
         this.accountID = accountID;
         this.date = date;
-        this.transferToID = transferToID;
-        this.transferFromID = transferFromID;
+        this.transferToNumber = transferToNumber;
+        this.transferFromNumber = transferFromNumber;
     }
     public int getId() {
         return id;
@@ -30,11 +30,11 @@ public class Transaction {
     public void setAmount(double amount) {
         this.amount = amount;
     }
-    public String getName() {
-        return name;
+    public String getType() {
+        return type;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setType(String type) {
+        this.type = type;
     }
     public int getAccountID() {
         return accountID;
@@ -48,16 +48,16 @@ public class Transaction {
     public void setDate(Date date) {
         this.date = date;
     }
-    public int getTransferToID() {
-        return transferToID;
+    public String getTransferToNumber() {
+        return transferToNumber;
     }
-    public void setTransferToID(int transferToID) {
-        this.transferToID = transferToID;
+    public void setTransferToNumber(String transferToNumber) {
+        this.transferToNumber = transferToNumber;
     }
-    public int getTransferFromID() {
-        return transferFromID;
+    public String getTransferFromNumber() {
+        return transferFromNumber;
     }
-    public void setTransferFromID(int transferFromID) {
-        this.transferFromID = transferFromID;
+    public void setTransferFromNumber(String transferFromNumber) {
+        this.transferFromNumber = transferFromNumber;
     }
 }

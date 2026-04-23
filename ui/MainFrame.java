@@ -71,6 +71,12 @@ public class MainFrame extends JFrame {
         revalidate();
         repaint();
     }
+    public void showViewTransactions(User user){
+        TransactionView transactionView = new TransactionView(this, user);
+        setContentPane(transactionView.getPanel());
+        revalidate();
+        repaint();
+    }
 
 
 

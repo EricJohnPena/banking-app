@@ -1,11 +1,16 @@
 package dao.impl;
 
 import dao.TransactionDAO;
+import model.Transaction;
 import util.DBConnection;
 
+import javax.xml.namespace.QName;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransactionDAOImpl implements TransactionDAO {
 
@@ -25,6 +30,35 @@ public class TransactionDAOImpl implements TransactionDAO {
 
         }
 
+    }
+
+    @Override
+    public List<Transaction> viewUserTransactions(int id) {
+        List<Transaction> transactions = new ArrayList<>();
+        String sql = "SELECT * FROM transactions WHERE fk_user_id = ?";
+        try{
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                Transaction transaction = new Transaction(
+                    rs.getInt("id"),
+                    rs.getDouble("amount"),
+                    rs.getString("type"),
+                    rs.getInt("fk_user_id"),
+                    rs.getDate("date"),
+                    rs.getString("to_number"),
+                    rs.getString("from_number")
+            );
+                transactions.add(transaction);
+
+            }
+            return  transactions;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

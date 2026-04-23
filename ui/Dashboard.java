@@ -51,6 +51,9 @@ public class Dashboard {
         btnCashIn.addActionListener(e ->{
             mainFrame.showCashInForm(user);
         });
+        btnTransactions.addActionListener(e -> {
+            mainFrame.showViewTransactions(user);
+        });
         btnCashOut.addActionListener(e ->{
             mainFrame.showCashOutForm(user);
         });
