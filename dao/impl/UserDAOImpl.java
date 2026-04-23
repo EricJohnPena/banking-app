@@ -116,8 +116,6 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
 public void updatePin(User user, String newPin) {
-    
-
     String sql = "UPDATE users SET pin = ? WHERE id = ?";
     try (PreparedStatement stmt = conn.prepareStatement(sql)) {
         stmt.setString(1, newPin);
@@ -133,6 +131,31 @@ public void updatePin(User user, String newPin) {
         System.out.println("Error changing PIN: " + e.getMessage());
         e.printStackTrace();
     }
+}
+@Override
+    public User findUserByNumber(String number){
+    String sql = "SELECT * FROM users WHERE number = ?";
+
+    try {
+        PreparedStatement stmt= conn.prepareStatement(sql);
+        stmt.setString(1, number);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()){
+            return new User(
+                    rs.getInt("id"),
+                    rs.getString("username"),
+                    rs.getString("email"),
+                    rs.getString("number"),
+                    rs.getString("pin")
+            );
+        }else {
+            System.out.println("No user");
+        }
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
+
+    return null;
 }
 
 }

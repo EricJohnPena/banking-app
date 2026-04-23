@@ -31,8 +31,8 @@ CREATE TABLE transactions (
     type TEXT NOT NULL,
     date TIMESTAMP DEFAULT NOW(),
 
-    to_id INTEGER NOT NULL,
-    from_id INTEGER,
+    to_number text NOT NULL,
+    from_number text NOT NULL,
     fk_user_id INTEGER ,
 
     CONSTRAINT fk_transaction_user

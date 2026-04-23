@@ -35,58 +35,24 @@ public class AccountDAOImpl implements AccountDAO {
 
 
     @Override
-    public Accounts updateCash(double amount, String type, int userID, int toID, int fromID) {
+    public void updateCash(double amount, int userID) {
+        String sql = "UPDATE account SET balance = balance + ? WHERE fk_user_id = ?";
+    try {
+        conn = DBConnection.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setDouble(1, amount);
+        stmt.setInt(2, userID);
 
-        String updateSql = "UPDATE account SET balance = ? WHERE fk_user_id = ?";
-        String insertSql = "INSERT INTO transactions (amount, type, to_id, from_id, fk_user_id) VALUES (?, ?, ?, ?, ?)";
-
-        try {
-            conn = DBConnection.getConnection();
-            conn.setAutoCommit(false);
-
-            // 1. Update balance (ADD, not overwrite)
-            PreparedStatement updateStmt = conn.prepareStatement(updateSql);
-            updateStmt.setDouble(1, amount);
-            updateStmt.setInt(2, userID);
-
-            int rows = updateStmt.executeUpdate();
-            if (rows == 0) {
-                conn.rollback();
-                throw new RuntimeException("Account not found");
-            }
-
-            // 2. Insert transaction
-            PreparedStatement txnStmt = conn.prepareStatement(insertSql);
-            txnStmt.setDouble(1, amount);
-            txnStmt.setString(2, type);
-            txnStmt.setInt(3, toID);
-            txnStmt.setInt(4, fromID);
-            txnStmt.setInt(5, userID);
-            txnStmt.executeUpdate();
-
-            conn.commit();
-
-            return findAccount(userID);
-
-        } catch (SQLException e) {
-            try {
-                conn.rollback(); // ❌ rollback on error
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                conn.setAutoCommit(true);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        int rows = stmt.executeUpdate();
+        if (rows == 0) {
+            throw new RuntimeException("Account not found");
         }
+
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
     }
 
 
-    @Override
-    public Accounts cashOut(int userID, double amount) {
-        return null;
-    }
+
 }

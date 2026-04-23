@@ -1,5 +1,7 @@
 import dao.AccountDAO;
+import dao.TransactionDAO;
 import dao.impl.AccountDAOImpl;
+import dao.impl.TransactionDAOImpl;
 import model.Accounts;
 import model.User;
 import service.CashInOut;
@@ -28,16 +30,13 @@ public class CashInForm {
             try{
                 Connection conn = DBConnection.getConnection();
                 AccountDAO accountDAO = new AccountDAOImpl(conn);
-                CashInOut cashIn = ((userID, amount, balance) -> {
-                   double total = amount + balance;
-                    return accountDAO.updateCash( total, "Cash In",userID, userID, userID);
+                TransactionDAO transactionDAO = new TransactionDAOImpl();
+                CashInOut cashIn = ((userID, amount) -> {
+                   accountDAO.updateCash( amount, userID);
                 });
-                CheckBalance checkBalance = (userID -> {
-                    return accountDAO.findAccount(userID);
-                });
-                Accounts accounts = checkBalance.check(user.getId());
-                System.out.println(accounts.getAmount());
-                 accounts = cashIn.moveCash(user.getId(),cashAmount, accounts.getAmount() );
+
+                 cashIn.moveCash(user.getId(),cashAmount);
+                 transactionDAO.insertTransaction(cashAmount, "Cash In",user.getNumber(), user.getNumber(), user.getId());
                 JOptionPane.showMessageDialog(panel,"Successfully deposited: " + cashAmount);
                 mainFrame.showDashboard(user);
             } catch (SQLException ex) {

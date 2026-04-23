@@ -3,5 +3,5 @@ package service;
 import model.Accounts;
 
 public interface CashTransfer {
-    Accounts cashTransfer(int userID, String recipientNumber, double amount);
+    void cashTransfer(int userID, String recipientNumber, String senderNumber, double amount);
 }

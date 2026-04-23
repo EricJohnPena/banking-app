@@ -65,6 +65,13 @@ public class MainFrame extends JFrame {
         repaint();
     }
 
+    public void showTransferMoney(User user){
+        TransferMoney transferMoney = new TransferMoney(this, user);
+        setContentPane(transferMoney.getPanel());
+        revalidate();
+        repaint();
+    }
+
 
 
 }

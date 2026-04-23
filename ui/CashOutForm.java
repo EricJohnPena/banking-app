@@ -1,5 +1,7 @@
 import dao.AccountDAO;
+import dao.TransactionDAO;
 import dao.impl.AccountDAOImpl;
+import dao.impl.TransactionDAOImpl;
 import model.Accounts;
 import model.User;
 import service.CashInOut;
@@ -28,15 +30,12 @@ public class CashOutForm {
             try{
                 Connection conn = DBConnection.getConnection();
                 AccountDAO accountDAO = new AccountDAOImpl(conn);
-                CashInOut cashOut = ((userID, amount, balance) -> {
-                    double total = balance - amount;
-                    return accountDAO.updateCash(total, "Cash Out",userID, userID, userID);
+                TransactionDAO transactionDAO = new TransactionDAOImpl();
+                CashInOut cashOut = ((userID, amount) -> {
+                     accountDAO.updateCash(-amount, userID);
                 });
-                CheckBalance checkBalance = (userID -> {
-                    return accountDAO.findAccount(userID);
-                });
-                Accounts accounts = checkBalance.check(user.getId());
-                accounts = cashOut.moveCash(user.getId(), cashOutAmount,accounts.getAmount() );
+                cashOut.moveCash(user.getId(), cashOutAmount );
+                transactionDAO.insertTransaction(cashOutAmount, "Cash In",user.getNumber(), user.getNumber(), user.getId());
                 JOptionPane.showMessageDialog(panel, "Successfully withdraw :" + cashOutAmount);
                 mainFrame.showDashboard(user);
             } catch (SQLException ex) {
