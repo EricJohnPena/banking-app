@@ -1,9 +1,10 @@
+import model.Accounts;
 import model.User;
 
 import javax.swing.*;
 
 public class MainFrame extends JFrame {
-    private User currentUser;
+    private User currentUser;private Accounts account;
     public MainFrame() {
 
         setTitle("Simple Swing App");
@@ -48,6 +49,18 @@ public class MainFrame extends JFrame {
     public void showChangePIN(User user){
         ChangePIN changePINForm = new ChangePIN(this, user);
         setContentPane(changePINForm.getPanel());
+        revalidate();
+        repaint();
+    }
+    public void showCashInForm(User user){
+        CashInForm cashInForm = new CashInForm(this, user);
+        setContentPane(cashInForm.getPanel());
+        revalidate();
+        repaint();
+    }
+    public void showCashOutForm(User user){
+        CashOutForm cashOutForm = new CashOutForm(this, user);
+        setContentPane(cashOutForm.getPanel());
         revalidate();
         repaint();
     }

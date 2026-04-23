@@ -22,13 +22,16 @@ public class Dashboard {
     private JButton btnTransfer;
     private JButton btnChangePIN;
     private JButton btnLogout;
+    private Accounts account;
     private User user;
+
     private MainFrame mainFrame;
     private Connection conn;
 
     Dashboard(MainFrame mainFrame, User user){
         this.mainFrame = mainFrame;
         this.user = user;
+        this.account = account;
 
         lblWelcome.setText("Welcome to Dashboard! " + user.getName());
         btnCheckBalance.addActionListener(e -> {
@@ -38,11 +41,18 @@ public class Dashboard {
                 CheckBalance checkBalance = (userID -> {
                    return accountDAO.findAccount(userID);
                 });
-                Accounts account = checkBalance.check(user.getId());
-                JOptionPane.showMessageDialog(panel,"Your current balance is: " + account.getAmount());
+                 Accounts accounts = checkBalance.check(user.getId());
+                JOptionPane.showMessageDialog(panel,"Your current balance is: " + accounts.getAmount());
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
+        });
+
+        btnCashIn.addActionListener(e ->{
+            mainFrame.showCashInForm(user);
+        });
+        btnCashOut.addActionListener(e ->{
+            mainFrame.showCashOutForm(user);
         });
 
         btnChangePIN.addActionListener(e -> {
