@@ -158,4 +158,19 @@ public void updatePin(User user, String newPin) {
     return null;
 }
 
+    @Override
+    public <T> boolean isExist(String tableName, String columnName, T value) {
+        String sql = String.format("SELECT 1 FROM %s WHERE LOWER(%s) = ?",tableName,columnName);
+        try{
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setObject(1,value);
+
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }

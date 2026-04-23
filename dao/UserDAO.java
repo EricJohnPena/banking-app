@@ -8,4 +8,5 @@ public interface UserDAO {
     User findUser(String number, String pin);
     void updatePin(User user, String newPin);
     User findUserByNumber(String number);
+    <T> boolean isExist(String tableName, String columnName, T value);
 }

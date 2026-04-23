@@ -1,6 +1,7 @@
 
 import dao.impl.UserDAOImpl;
 import model.User;
+import service.UserValidator;
 import service.impl.UserAuthenticationImpl;
 import util.DBConnection;
 import javax.swing.*;
@@ -25,7 +26,15 @@ public class Login {
         btnLogin.addActionListener(e -> {
             String numberInput = textNumber.getText();
             String pinInput = new String(passwordPIN.getPassword());
-            System.out.println(pinInput);
+            if(numberInput.isEmpty() || passwordPIN.getPassword().length==0){
+                JOptionPane.showMessageDialog(null, "All fields are required.");
+            }
+            else if(!UserValidator.isValidMobileNumber(numberInput)){
+                JOptionPane.showMessageDialog(null, "Invalid mobile number");
+            }else if(!UserValidator.isValidPIN(pinInput)){
+                JOptionPane.showMessageDialog(null, "Invalid PIN.");
+            }
+            else
             {
                 try {
                     conn = DBConnection.getConnection();
@@ -37,7 +46,7 @@ public class Login {
                         mainFrame.setUser(user);
                         mainFrame.showDashboard(user);
                     } else {
-                        JOptionPane.showMessageDialog(panel, "Invalid Credentials!");
+                        JOptionPane.showMessageDialog(panel, "Incorrect mobile number or PIN.");
                     }
                 } catch (SQLException s) {
                     throw new RuntimeException(s);

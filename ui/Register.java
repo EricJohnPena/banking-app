@@ -1,10 +1,13 @@
 import dao.UserDAO;
 import dao.impl.UserDAOImpl;
+import service.UserValidator;
 import service.impl.UserAuthenticationImpl;
 import util.DBConnection;
 
 import javax.swing.*;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Register {
     private JPanel panel;
@@ -28,16 +31,54 @@ public class Register {
             String numberInput = txtNumber.getText();
             String pinInput = new String(pwdPIN.getPassword());
             String pinReInput = new String(pwdRePIN.getPassword());
+
+            if(nameInput.isEmpty() || emailInput.isEmpty() || numberInput.isEmpty() || pinInput.isEmpty() || pinReInput.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "All fields are required.");
+                return;
+            }
+            if(!UserValidator.isValidName(nameInput)){
+                JOptionPane.showMessageDialog(null, "Invalid name." +
+                        "\nName must be at least 3 characters long.");
+                return;
+            }
+            if(!UserValidator.isValidEmail(emailInput)){
+                JOptionPane.showMessageDialog(null, "Invalid email." +
+                        "\nEx.: 'test@email.com'");
+                return;
+            }
+            if(!UserValidator.isValidMobileNumber(numberInput)){
+                JOptionPane.showMessageDialog(null, "Invalid mobile number." +
+                        "\nMobile number must only be composed of 10 digits." +
+                        "\nEx.: 9876543210");
+                return;
+            }
+            if(!UserValidator.isValidPIN(pinInput)){
+                JOptionPane.showMessageDialog(null, "Invalid PIN." +
+                        "\nPIN must be 4 digits long.");
+                return;
+            }
+            if(!pinInput.equals(pinReInput)){
+                JOptionPane.showMessageDialog(null, "PIN did not match." +
+                        "\nPlease try again.");
+                return;
+            }
             try{
                 conn = DBConnection.getConnection();
                 UserDAO userDAO = new UserDAOImpl(conn);
                 UserAuthenticationImpl auth = new UserAuthenticationImpl(userDAO);
+                //another validation
+                try {
+                    auth.register(nameInput,emailInput,numberInput,pinInput);
+                    JOptionPane.showMessageDialog(null, "Registered successfully!");
+                    mainFrame.showLogin();
+                } catch (RuntimeException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
 
-                auth.register(nameInput,emailInput,numberInput,pinInput);
-                mainFrame.showLogin();
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
+
         });
 
         btnLogin.addActionListener(e ->{

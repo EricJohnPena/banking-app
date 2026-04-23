@@ -11,25 +11,21 @@ public class UserAuthenticationImpl implements UserAuthentication {
     }
 
     public User login(String number, String pin){
-       User user = userDAO.findUser(number, pin);
-       if (user != null) {
-           System.out.println("LoginForm successful for user: " + user.getName());
-           return user;
-       } else {
-           System.out.println("LoginForm failed. Invalid number or PIN.");
-           return null;
-       }
+       return userDAO.findUser(number, pin);
+
     }
 
     public void register(String name, String email, String number, String pin){
+        if(userDAO.isExist("users","email",email))
+            throw new RuntimeException("Email already exists");
+        if (userDAO.isExist("users","number",number))
+            throw new RuntimeException("Mobile number already exists");
         userDAO.createUser(name, email, number, pin);
     }
 
     public void changePin(User user, String newPin) {
-       if (user.isValidPin(newPin))
         userDAO.updatePin(user, newPin);
-       else
-        System.out.println("Invalid PIN input");
+
     }
 
     public void logout(User user){
