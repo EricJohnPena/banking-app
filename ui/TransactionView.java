@@ -4,7 +4,9 @@ import model.Transaction;
 import model.User;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,17 +38,34 @@ public class TransactionView {
         DefaultTableModel model = new DefaultTableModel(columns, 0);
 
         for (Transaction transaction : transactions) {
+            //ternary operator
+            String from = transaction.getTransferFromNumber().equals(user.getNumber())
+                    ? "-"
+                    : transaction.getTransferFromNumber();
+
+            String to = transaction.getTransferToNumber().equals(user.getNumber())
+                    ? "-"
+                    : transaction.getTransferToNumber();
             Object[] row = {
                     transaction.getType(),
                     transaction.getDate(),
                     transaction.getAmount(),
-                    transaction.getTransferFromNumber(),
-                    transaction.getTransferToNumber()
+                    from ,
+                    to
             };
             model.addRow(row);
         }
 
         tblTransactions.setModel(model);
+         // Center renderer
+         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+        // Apply to all columns
+         TableColumnModel columnModel = tblTransactions.getColumnModel();
+         for (int i = 0; i < columnModel.getColumnCount(); i++) {
+             columnModel.getColumn(i).setCellRenderer(centerRenderer);
+         }
     }
 
 
