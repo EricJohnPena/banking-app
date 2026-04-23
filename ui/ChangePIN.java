@@ -1,6 +1,12 @@
+import dao.UserDAO;
+import dao.impl.UserDAOImpl;
 import model.User;
+import service.impl.UserAuthenticationImpl;
+import util.DBConnection;
 
 import javax.swing.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class ChangePIN {
     private JPanel panel;
@@ -16,6 +22,23 @@ public class ChangePIN {
     ChangePIN(MainFrame mainFrame, User user){
         this.mainFrame = mainFrame;
         this.user = user;
+
+        btnSave.addActionListener(e -> {
+            String newPIN = new String(pwdNewPIN.getPassword());
+            try {
+                Connection conn = DBConnection.getConnection();
+                UserDAO userDAO = new UserDAOImpl(conn);
+                UserAuthenticationImpl auth = new UserAuthenticationImpl(userDAO);
+                auth.changePin(user, newPIN);
+                JOptionPane.showMessageDialog(panel,"PIN changed successfully.");
+                mainFrame.showDashboard(user);
+
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
+        });
+
 
         btnCancel.addActionListener(e -> {
             mainFrame.showDashboard(user);
