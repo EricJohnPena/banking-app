@@ -30,14 +30,14 @@ public class CashOutForm {
                 AccountDAO accountDAO = new AccountDAOImpl(conn);
                 CashInOut cashOut = ((userID, amount, balance) -> {
                     double total = balance - amount;
-                    return accountDAO.updateCash(userID, total);
+                    return accountDAO.updateCash(total, "Cash Out",userID, userID, userID);
                 });
                 CheckBalance checkBalance = (userID -> {
                     return accountDAO.findAccount(userID);
                 });
                 Accounts accounts = checkBalance.check(user.getId());
                 accounts = cashOut.moveCash(user.getId(), cashOutAmount,accounts.getAmount() );
-                JOptionPane.showMessageDialog(panel, "Successfully widrawed :" + cashOutAmount);
+                JOptionPane.showMessageDialog(panel, "Successfully withdraw :" + cashOutAmount);
                 mainFrame.showDashboard(user);
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);

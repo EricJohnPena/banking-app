@@ -21,7 +21,7 @@
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Label"/>
+          <text value="Enter mobile number:"/>
         </properties>
       </component>
       <component id="c93dc" class="javax.swing.JTextField" binding="textNumber">
@@ -30,14 +30,16 @@
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <text value=""/>
+        </properties>
       </component>
       <component id="2fd37" class="javax.swing.JLabel">
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Label"/>
+          <text value="Enter PIN:"/>
         </properties>
       </component>
       <component id="439a5" class="javax.swing.JPasswordField" binding="passwordPIN">

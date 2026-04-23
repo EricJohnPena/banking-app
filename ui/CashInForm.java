@@ -30,7 +30,7 @@ public class CashInForm {
                 AccountDAO accountDAO = new AccountDAOImpl(conn);
                 CashInOut cashIn = ((userID, amount, balance) -> {
                    double total = amount + balance;
-                    return accountDAO.updateCash(userID, total);
+                    return accountDAO.updateCash( total, "Cash In",userID, userID, userID);
                 });
                 CheckBalance checkBalance = (userID -> {
                     return accountDAO.findAccount(userID);

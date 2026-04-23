@@ -4,6 +4,6 @@ import model.Accounts;
 
 public interface AccountDAO {
     Accounts findAccount(int userID);
-    Accounts updateCash(int userID, double amount);
+    Accounts updateCash(double amount,  String type, int userID, int toID, int fromID);
     Accounts cashOut(int userID, double amount);
 }

@@ -1,15 +1,42 @@
-create table account (
-id SERIAL PRIMARY KEY,
-balance DOUBLE PRECISION,
-fk_user_id INTEGER NOT NULL,
-CONSTRAINT fk_user
-FOREIGN KEY(fk_user_id)
-REFERENCES users(id)
-ON DELETE CASCADE);
+-- USERS TABLE
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username TEXT NOT NULL,
+    email TEXT,
+    number TEXT UNIQUE,
+    pin TEXT NOT NULL
+);
 
-create table users (
-id SERIAL PRIMARY KEY,
-username TEXT NOT NULL,
-email TEXT,
-number TEXT UNIQUE,
-pin TEXT NOT NULL);
+--------------------------------------------------
+
+-- ACCOUNT TABLE
+CREATE TABLE account (
+    id SERIAL PRIMARY KEY,
+    balance DECIMAL(15,2) DEFAULT 0.00,
+
+    fk_user_id INTEGER NOT NULL,
+
+    CONSTRAINT fk_account_user
+        FOREIGN KEY (fk_user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
+
+--------------------------------------------------
+
+-- TRANSACTIONS TABLE
+CREATE TABLE transactions (
+    id SERIAL PRIMARY KEY,
+    amount DECIMAL(15,2) NOT NULL,
+    type TEXT NOT NULL,
+    date TIMESTAMP DEFAULT NOW(),
+
+    to_id INTEGER NOT NULL,
+    from_id INTEGER,
+    fk_user_id INTEGER ,
+
+    CONSTRAINT fk_transaction_user
+        FOREIGN KEY (fk_user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+);
