@@ -1,6 +1,16 @@
+import dao.AccountDAO;
+import dao.UserDAO;
+import dao.impl.AccountDAOImpl;
+import dao.impl.UserDAOImpl;
+import model.Accounts;
 import model.User;
+import service.CheckBalance;
+import service.impl.UserAuthenticationImpl;
+import util.DBConnection;
 
 import javax.swing.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class Dashboard {
     private JPanel panel;
@@ -14,14 +24,33 @@ public class Dashboard {
     private JButton btnLogout;
     private User user;
     private MainFrame mainFrame;
+    private Connection conn;
 
     Dashboard(MainFrame mainFrame, User user){
         this.mainFrame = mainFrame;
         this.user = user;
-        lblWelcome.setText("Welcome to Dashboard! " + user.getName());
-        btnLogout.addActionListener(e -> {
-            mainFrame.logout(user);
 
+        lblWelcome.setText("Welcome to Dashboard! " + user.getName());
+        btnCheckBalance.addActionListener(e -> {
+            try {
+                conn = DBConnection.getConnection();
+                AccountDAO accountDAO = new AccountDAOImpl(conn);
+                CheckBalance checkBalance = (userID -> {
+                   return accountDAO.findAccount(userID);
+                });
+                Accounts account = checkBalance.check(user.getId());
+                JOptionPane.showMessageDialog(panel,"Your current balance is: " + account.getAmount());
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        btnChangePIN.addActionListener(e -> {
+            mainFrame.showChangePIN(user);
+
+        });
+        btnLogout.addActionListener(e -> {
+                mainFrame.logout(user);
         });
     }
     public JPanel getPanel() {

@@ -45,5 +45,13 @@ public class MainFrame extends JFrame {
         revalidate();
         repaint();
     }
+    public void showChangePIN(User user){
+        ChangePIN changePINForm = new ChangePIN(this, user);
+        setContentPane(changePINForm.getPanel());
+        revalidate();
+        repaint();
+    }
+
+
 
 }

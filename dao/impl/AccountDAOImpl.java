@@ -17,12 +17,14 @@ public class AccountDAOImpl implements AccountDAO {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, userID);
             ResultSet rs = stmt.executeQuery();
-
-            return new Accounts(
+            if (rs.next()) {
+                return new Accounts(
                         rs.getInt("id"),
                         rs.getDouble("balance"),
                         rs.getInt("fk_user_id")
                 );
+            }
+            return null;
 
         } catch (SQLException e) {
             System.out.println("Query failed.");

@@ -1,5 +1,7 @@
 package service;
 
+import model.Accounts;
+
 public interface CheckBalance {
-    String checkBalance(int userID);
+    Accounts check(int userID);
 }
