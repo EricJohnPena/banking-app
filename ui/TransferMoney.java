@@ -62,10 +62,21 @@ public class TransferMoney {
                         JOptionPane.showMessageDialog(panel, "User with mobile number "+ recipient+" does not exist.");
                         return;
                     }
-                    //execute cash transfer using CashTransfer lambda
-                    transfer.cashTransfer(user.getId(), recipient, user.getNumber(), amountToSend);
-                    JOptionPane.showMessageDialog(panel, "Transferred " + amountToSend + " to " + recipient);
-                    mainFrame.showDashboard(user);
+
+                    int choice = JOptionPane.showConfirmDialog(
+                            panel,
+                            "Do you really want to send "+ amountToSend + " to "+recipient+"?",
+                            "Cash transfer",
+                            JOptionPane.YES_NO_OPTION
+                    );
+
+                    if (choice == JOptionPane.YES_OPTION){
+                        //execute cash transfer using CashTransfer lambda
+                        transfer.cashTransfer(user.getId(), recipient, user.getNumber(), amountToSend);
+                        JOptionPane.showMessageDialog(panel, "Transferred " + amountToSend + " to " + recipient);
+                        mainFrame.showDashboard(user);
+                    }
+
                 } catch (RuntimeException | SQLException ex) {
                     throw new RuntimeException(ex);
                 }

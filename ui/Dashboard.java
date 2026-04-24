@@ -66,7 +66,16 @@ public class Dashboard {
 
         });
         btnLogout.addActionListener(e -> {
+            int choice = JOptionPane.showConfirmDialog(
+                    panel,
+                    "Do you really want to logout?",
+                    "Logout",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (choice == JOptionPane.YES_OPTION)
                 mainFrame.logout(user);
+
         });
     }
     public JPanel getPanel() {

@@ -33,12 +33,16 @@ public class ChangePIN {
                 JOptionPane.showMessageDialog(panel, "All fields are required!");
                 return;
             }
-            if(!newPIN.equals(oldPin)){
-                JOptionPane.showMessageDialog(panel, "New PIN did not match.\nPlease try again.");
-                return;
-            }
             if(!UserValidator.isValidPIN(newPIN)){
                 JOptionPane.showMessageDialog(panel, "Invalid PIN number");
+                return;
+            }
+            if(!oldPin.equals(user.getPin())){
+                JOptionPane.showMessageDialog(panel, "Incorrect PIN!");
+                return;
+            }
+            if(!newPIN.equals(reNewPIN)){
+                JOptionPane.showMessageDialog(panel, "New PIN did not match.\nPlease try again.");
                 return;
             }
 

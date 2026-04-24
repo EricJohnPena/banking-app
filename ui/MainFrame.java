@@ -28,13 +28,14 @@ public class MainFrame extends JFrame {
     public void showLogin() {
         Login loginForm = new Login(this);
         setContentPane(loginForm.getPanel());
+        setSize(250, 300);
         revalidate();
         repaint();
     }
 
     public void showDashboard(User user) {
         Dashboard dashboardForm = new Dashboard(this, user);
-        //setSize(500, 600);
+        setSize(400, 300);
         setContentPane(dashboardForm.getPanel());
         revalidate();
         repaint();
@@ -50,18 +51,21 @@ public class MainFrame extends JFrame {
     public void showChangePIN(User user){
         ChangePIN changePINForm = new ChangePIN(this, user);
         setContentPane(changePINForm.getPanel());
+        setSize(400, 300);
         revalidate();
         repaint();
     }
     public void showCashInForm(User user){
         CashInForm cashInForm = new CashInForm(this, user);
         setContentPane(cashInForm.getPanel());
+        setSize(400, 300);
         revalidate();
         repaint();
     }
     public void showCashOutForm(User user){
         CashOutForm cashOutForm = new CashOutForm(this, user);
         setContentPane(cashOutForm.getPanel());
+        setSize(400, 300);
         revalidate();
         repaint();
     }
@@ -69,12 +73,14 @@ public class MainFrame extends JFrame {
     public void showTransferMoney(User user){
         TransferMoney transferMoney = new TransferMoney(this, user);
         setContentPane(transferMoney.getPanel());
+        setSize(400, 300);
         revalidate();
         repaint();
     }
     public void showViewTransactions(User user){
         TransactionView transactionView = new TransactionView(this, user);
         setContentPane(transactionView.getPanel());
+        setSize(530, 330);
         revalidate();
         repaint();
     }
