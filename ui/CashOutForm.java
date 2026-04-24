@@ -26,21 +26,38 @@ public class CashOutForm {
         this.user = user;
 
         btnCashOut.addActionListener(e -> {
-            double cashOutAmount = Double.parseDouble(txtCashOut.getText());
+            double cashOutAmount = 0.0;
             try{
-                Connection conn = DBConnection.getConnection();
-                AccountDAO accountDAO = new AccountDAOImpl(conn);
-                TransactionDAO transactionDAO = new TransactionDAOImpl();
-                CashInOut cashOut = ((userID, amount) -> {
-                     accountDAO.updateCash(-amount, userID);
-                });
-                cashOut.moveCash(user.getId(), cashOutAmount );
-                transactionDAO.insertTransaction(cashOutAmount, "Cash In",user.getNumber(), user.getNumber(), user.getId());
-                JOptionPane.showMessageDialog(panel, "Successfully withdraw :" + cashOutAmount);
-                mainFrame.showDashboard(user);
-            } catch (SQLException ex) {
+               cashOutAmount = Double.parseDouble(txtCashOut.getText());
+                try{
+                    Connection conn = DBConnection.getConnection();
+                    AccountDAO accountDAO = new AccountDAOImpl(conn);
+                    TransactionDAO transactionDAO = new TransactionDAOImpl();
+                    CheckBalance checkBalance = (userID -> {
+                        return accountDAO.findAccount(userID);
+                    });
+                    Accounts account = checkBalance.check(user.getId());
+                    if(account.getAmount() < cashOutAmount){
+                        JOptionPane.showMessageDialog(panel, "Insufficient balance.");
+                    }else{
+                        CashInOut cashOut = ((userID, amount) -> {
+                            accountDAO.updateCash(-amount, userID);
+                        });
+                        cashOut.moveCash(user.getId(), cashOutAmount );
+                        transactionDAO.insertTransaction(cashOutAmount, "Cash In",user.getNumber(), user.getNumber(), user.getId());
+                        JOptionPane.showMessageDialog(panel, "Successfully withdraw :" + cashOutAmount);
+                        mainFrame.showDashboard(user);
+                    }
+
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(panel, "Input must be a valid number.");
                 throw new RuntimeException(ex);
             }
+
+
         });
 
         btnCancel.addActionListener(e ->{
