@@ -1,6 +1,7 @@
 import dao.UserDAO;
 import dao.impl.UserDAOImpl;
 import model.User;
+import service.UserValidator;
 import service.impl.UserAuthenticationImpl;
 import util.DBConnection;
 
@@ -24,7 +25,23 @@ public class ChangePIN {
         this.user = user;
 
         btnSave.addActionListener(e -> {
+            String oldPin = txtOldPIN.getText();
             String newPIN = new String(pwdNewPIN.getPassword());
+            String reNewPIN = new String(pwdReNewPIN.getPassword());
+            //validation for PIN number
+            if(oldPin.isEmpty()|| newPIN.isEmpty() || reNewPIN.isEmpty()){
+                JOptionPane.showMessageDialog(panel, "All fields are required!");
+                return;
+            }
+            if(!newPIN.equals(oldPin)){
+                JOptionPane.showMessageDialog(panel, "New PIN did not match.\nPlease try again.");
+                return;
+            }
+            if(!UserValidator.isValidPIN(newPIN)){
+                JOptionPane.showMessageDialog(panel, "Invalid PIN number");
+                return;
+            }
+
             try {
                 Connection conn = DBConnection.getConnection();
                 UserDAO userDAO = new UserDAOImpl(conn);

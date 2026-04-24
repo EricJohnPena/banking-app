@@ -38,7 +38,7 @@ public class TransactionView {
         DefaultTableModel model = new DefaultTableModel(columns, 0);
 
         for (Transaction transaction : transactions) {
-            //ternary operator
+            //ternary operator. this is just for not displaying the current user's number to the table
             String from = transaction.getTransferFromNumber().equals(user.getNumber())
                     ? "-"
                     : transaction.getTransferFromNumber();
@@ -50,8 +50,8 @@ public class TransactionView {
                     transaction.getType(),
                     transaction.getDate(),
                     transaction.getAmount(),
-                    from ,
-                    to
+                    from ,//from ternary operator
+                    to//from ternary operator
             };
             model.addRow(row);
         }

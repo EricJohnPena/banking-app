@@ -32,13 +32,14 @@ public class TransferMoney {
             }
             String recipient = txtNumber.getText();
             try {
+                //checking if amountToSend is a valid number
                 amountToSend = Double.parseDouble(txtAmount.getText());
                 try {
                     Connection conn = DBConnection.getConnection();
                     UserDAO userDAO = new UserDAOImpl(conn);
                     TransactionDAO transactionDAO = new TransactionDAOImpl();
                     AccountDAO accountDAO = new AccountDAOImpl(conn);
-                    //lambda
+                    //lambda for transferring cash
                     CashTransfer transfer = ((userID, recipientNumber, senderNumber, amount) -> {
                         User receiver = userDAO.findUserByNumber(recipientNumber);
                         accountDAO.updateCash(-amount, user.getId());
@@ -46,21 +47,22 @@ public class TransferMoney {
                         transactionDAO.insertTransaction(-amount, "Send", recipientNumber, senderNumber, userID);
                         transactionDAO.insertTransaction(amount, "Receive", recipientNumber, senderNumber, receiver.getId());
                     });
-                    //validation for checking if amount to send does not exceed remaining balance
+                    // lambda for checking available balance
                     CheckBalance checkBalance = (userID -> {
                         return accountDAO.findAccount(userID);
                     });
-                    Accounts account = checkBalance.check(user.getId());
+                    //validation for checking if amount to send does not exceed remaining balance
+                    Accounts account = checkBalance.check(user.getId());//used CheckBalance lambda
                     if(account.getAmount() < amountToSend){
                         JOptionPane.showMessageDialog(panel, "Insufficient balance.");
                         return;
                     }
                     //validation for receiver number if existing
                     if(!userDAO.isExist("users", "number",recipient)){
-                        JOptionPane.showMessageDialog(panel, "User with number = "+ recipient+" does not exist.");
+                        JOptionPane.showMessageDialog(panel, "User with mobile number "+ recipient+" does not exist.");
                         return;
                     }
-
+                    //execute cash transfer using CashTransfer lambda
                     transfer.cashTransfer(user.getId(), recipient, user.getNumber(), amountToSend);
                     JOptionPane.showMessageDialog(panel, "Transferred " + amountToSend + " to " + recipient);
                     mainFrame.showDashboard(user);
@@ -74,8 +76,6 @@ public class TransferMoney {
                  
                 
         });
-
-
 
         cancelButton.addActionListener(e -> {
             mainFrame.showDashboard(user);

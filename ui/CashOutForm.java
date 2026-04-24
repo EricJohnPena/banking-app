@@ -33,9 +33,11 @@ public class CashOutForm {
                     Connection conn = DBConnection.getConnection();
                     AccountDAO accountDAO = new AccountDAOImpl(conn);
                     TransactionDAO transactionDAO = new TransactionDAOImpl();
+                    //lambda for checking balance
                     CheckBalance checkBalance = (userID -> {
                         return accountDAO.findAccount(userID);
                     });
+                    //validation for current uer balance
                     Accounts account = checkBalance.check(user.getId());
                     if(account.getAmount() < cashOutAmount){
                         JOptionPane.showMessageDialog(panel, "Insufficient balance.");
@@ -44,7 +46,9 @@ public class CashOutForm {
                     CashInOut cashOut = ((userID, amount) -> {
                         accountDAO.updateCash(-amount, userID);
                     });
+                    //subtracting the balance on database table
                     cashOut.moveCash(user.getId(), cashOutAmount );
+                    //logging on transactions table
                     transactionDAO.insertTransaction(cashOutAmount, "Cash In",user.getNumber(), user.getNumber(), user.getId());
                     JOptionPane.showMessageDialog(panel, "Successfully withdraw :" + cashOutAmount);
                     mainFrame.showDashboard(user);

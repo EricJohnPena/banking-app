@@ -31,7 +31,7 @@ public class Register {
             String numberInput = txtNumber.getText();
             String pinInput = new String(pwdPIN.getPassword());
             String pinReInput = new String(pwdRePIN.getPassword());
-
+            //validation for inputs
             if(nameInput.isEmpty() || emailInput.isEmpty() || numberInput.isEmpty() || pinInput.isEmpty() || pinReInput.isEmpty()) {
                 JOptionPane.showMessageDialog(panel, "All fields are required.");
                 return;
@@ -66,6 +66,15 @@ public class Register {
                 conn = DBConnection.getConnection();
                 UserDAO userDAO = new UserDAOImpl(conn);
                 UserAuthenticationImpl auth = new UserAuthenticationImpl(userDAO);
+                //validation if user mobile number and email already exists
+                if(userDAO.isExist("users", "number", numberInput)){
+                    JOptionPane.showMessageDialog(panel, "Mobile number already exists!");
+                    return;
+                }
+                if(userDAO.isExist("users", "email", emailInput)){
+                    JOptionPane.showMessageDialog(panel, "Email address already exists!");
+                    return;
+                }
                 try {
                     auth.register(nameInput,emailInput,numberInput,pinInput);
                     JOptionPane.showMessageDialog(panel, "Registered successfully!");

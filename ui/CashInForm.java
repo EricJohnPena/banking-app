@@ -37,11 +37,13 @@ public class CashInForm {
                         Connection conn = DBConnection.getConnection();
                         AccountDAO accountDAO = new AccountDAOImpl(conn);
                         TransactionDAO transactionDAO = new TransactionDAOImpl();
+                        //lambda for cash in/deposit
                         CashInOut cashIn = ((userID, amount) -> {
                             accountDAO.updateCash(amount, userID);
                         });
-
+                        //adding new balance to the database table
                         cashIn.moveCash(user.getId(), cashAmount);
+                        //adding logs for transaction table
                         transactionDAO.insertTransaction(cashAmount, "Cash In", user.getNumber(), user.getNumber(), user.getId());
                         JOptionPane.showMessageDialog(panel, "Successfully deposited: " + cashAmount);
                         mainFrame.showDashboard(user);

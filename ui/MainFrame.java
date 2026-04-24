@@ -4,7 +4,8 @@ import model.User;
 import javax.swing.*;
 
 public class MainFrame extends JFrame {
-    private User currentUser;private Accounts account;
+    private User currentUser;
+    private Accounts account;
     public MainFrame() {
 
         setTitle("Simple Swing App");
