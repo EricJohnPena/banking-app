@@ -22,6 +22,9 @@ public class Dashboard {
     private JButton btnTransfer;
     private JButton btnChangePIN;
     private JButton btnLogout;
+    private JLabel lblName;
+    private JLabel lblEmail;
+    private JLabel lblNumber;
     private Accounts account;
     private User user;
 
@@ -33,7 +36,9 @@ public class Dashboard {
         this.user = user;
         this.account = account;
 
-        lblWelcome.setText("Welcome to Dashboard! " + user.getName());
+        lblName.setText(user.getName());
+        lblEmail.setText(user.getEmail());
+        lblNumber.setText(user.getNumber());
         btnCheckBalance.addActionListener(e -> {
             try {
                 conn = DBConnection.getConnection();

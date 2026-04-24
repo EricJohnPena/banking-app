@@ -16,10 +16,6 @@ public class UserAuthenticationImpl implements UserAuthentication {
     }
 
     public void register(String name, String email, String number, String pin){
-        if(userDAO.isExist("users","email",email))
-            throw new RuntimeException("Email already exists");
-        if (userDAO.isExist("users","number",number))
-            throw new RuntimeException("Mobile number already exists");
         userDAO.createUser(name, email, number, pin);
     }
 
