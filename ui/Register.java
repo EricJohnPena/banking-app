@@ -33,32 +33,32 @@ public class Register {
             String pinReInput = new String(pwdRePIN.getPassword());
 
             if(nameInput.isEmpty() || emailInput.isEmpty() || numberInput.isEmpty() || pinInput.isEmpty() || pinReInput.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "All fields are required.");
+                JOptionPane.showMessageDialog(panel, "All fields are required.");
                 return;
             }
             if(!UserValidator.isValidName(nameInput)){
-                JOptionPane.showMessageDialog(null, "Invalid name." +
+                JOptionPane.showMessageDialog(panel, "Invalid name." +
                         "\nName must be at least 3 characters long.");
                 return;
             }
             if(!UserValidator.isValidEmail(emailInput)){
-                JOptionPane.showMessageDialog(null, "Invalid email." +
+                JOptionPane.showMessageDialog(panel, "Invalid email." +
                         "\nEx.: 'test@email.com'");
                 return;
             }
             if(!UserValidator.isValidMobileNumber(numberInput)){
-                JOptionPane.showMessageDialog(null, "Invalid mobile number." +
+                JOptionPane.showMessageDialog(panel, "Invalid mobile number." +
                         "\nMobile number must only be composed of 10 digits." +
                         "\nEx.: 9876543210");
                 return;
             }
             if(!UserValidator.isValidPIN(pinInput)){
-                JOptionPane.showMessageDialog(null, "Invalid PIN." +
+                JOptionPane.showMessageDialog(panel, "Invalid PIN." +
                         "\nPIN must be 4 digits long.");
                 return;
             }
             if(!pinInput.equals(pinReInput)){
-                JOptionPane.showMessageDialog(null, "PIN did not match." +
+                JOptionPane.showMessageDialog(panel, "PIN did not match." +
                         "\nPlease try again.");
                 return;
             }
@@ -69,10 +69,10 @@ public class Register {
                 //another validation
                 try {
                     auth.register(nameInput,emailInput,numberInput,pinInput);
-                    JOptionPane.showMessageDialog(null, "Registered successfully!");
+                    JOptionPane.showMessageDialog(panel, "Registered successfully!");
                     mainFrame.showLogin();
                 } catch (RuntimeException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                    JOptionPane.showMessageDialog(panel, ex.getMessage());
                 }
 
             } catch (SQLException ex) {

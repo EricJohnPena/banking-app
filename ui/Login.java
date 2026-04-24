@@ -27,12 +27,12 @@ public class Login {
             String numberInput = textNumber.getText();
             String pinInput = new String(passwordPIN.getPassword());
             if(numberInput.isEmpty() || passwordPIN.getPassword().length==0){
-                JOptionPane.showMessageDialog(null, "All fields are required.");
+                JOptionPane.showMessageDialog(panel, "All fields are required.");
             }
             else if(!UserValidator.isValidMobileNumber(numberInput)){
-                JOptionPane.showMessageDialog(null, "Invalid mobile number");
+                JOptionPane.showMessageDialog(panel, "Invalid mobile number");
             }else if(!UserValidator.isValidPIN(pinInput)){
-                JOptionPane.showMessageDialog(null, "Invalid PIN.");
+                JOptionPane.showMessageDialog(panel, "Invalid PIN.");
             }
             else
             {

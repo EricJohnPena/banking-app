@@ -26,22 +26,35 @@ public class CashInForm {
         this.user = user;
 
         btnCashIn.addActionListener(e -> {
-            double cashAmount = Double.parseDouble(txtCashIn.getText());
+            double cashAmount = 0.0;
             try{
-                Connection conn = DBConnection.getConnection();
-                AccountDAO accountDAO = new AccountDAOImpl(conn);
-                TransactionDAO transactionDAO = new TransactionDAOImpl();
-                CashInOut cashIn = ((userID, amount) -> {
-                   accountDAO.updateCash( amount, userID);
-                });
+                  cashAmount = Double.parseDouble(txtCashIn.getText());
+                if(cashAmount <= 0){
+                    JOptionPane.showMessageDialog(panel,"Only positive integers are allowed.");
+                }
+                else {
+                    try {
+                        Connection conn = DBConnection.getConnection();
+                        AccountDAO accountDAO = new AccountDAOImpl(conn);
+                        TransactionDAO transactionDAO = new TransactionDAOImpl();
+                        CashInOut cashIn = ((userID, amount) -> {
+                            accountDAO.updateCash(amount, userID);
+                        });
 
-                 cashIn.moveCash(user.getId(),cashAmount);
-                 transactionDAO.insertTransaction(cashAmount, "Cash In",user.getNumber(), user.getNumber(), user.getId());
-                JOptionPane.showMessageDialog(panel,"Successfully deposited: " + cashAmount);
-                mainFrame.showDashboard(user);
-            } catch (SQLException ex) {
+                        cashIn.moveCash(user.getId(), cashAmount);
+                        transactionDAO.insertTransaction(cashAmount, "Cash In", user.getNumber(), user.getNumber(), user.getId());
+                        JOptionPane.showMessageDialog(panel, "Successfully deposited: " + cashAmount);
+                        mainFrame.showDashboard(user);
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(panel, "Input must be a valid number.");
                 throw new RuntimeException(ex);
             }
+
+
         });
 
         btnCancel.addActionListener(e ->{
