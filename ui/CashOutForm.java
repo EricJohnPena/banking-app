@@ -39,15 +39,16 @@ public class CashOutForm {
                     Accounts account = checkBalance.check(user.getId());
                     if(account.getAmount() < cashOutAmount){
                         JOptionPane.showMessageDialog(panel, "Insufficient balance.");
-                    }else{
-                        CashInOut cashOut = ((userID, amount) -> {
-                            accountDAO.updateCash(-amount, userID);
-                        });
-                        cashOut.moveCash(user.getId(), cashOutAmount );
-                        transactionDAO.insertTransaction(cashOutAmount, "Cash In",user.getNumber(), user.getNumber(), user.getId());
-                        JOptionPane.showMessageDialog(panel, "Successfully withdraw :" + cashOutAmount);
-                        mainFrame.showDashboard(user);
+                        return;
                     }
+                    CashInOut cashOut = ((userID, amount) -> {
+                        accountDAO.updateCash(-amount, userID);
+                    });
+                    cashOut.moveCash(user.getId(), cashOutAmount );
+                    transactionDAO.insertTransaction(cashOutAmount, "Cash In",user.getNumber(), user.getNumber(), user.getId());
+                    JOptionPane.showMessageDialog(panel, "Successfully withdraw :" + cashOutAmount);
+                    mainFrame.showDashboard(user);
+
 
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);

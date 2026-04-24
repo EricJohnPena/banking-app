@@ -66,7 +66,6 @@ public class Register {
                 conn = DBConnection.getConnection();
                 UserDAO userDAO = new UserDAOImpl(conn);
                 UserAuthenticationImpl auth = new UserAuthenticationImpl(userDAO);
-                //another validation
                 try {
                     auth.register(nameInput,emailInput,numberInput,pinInput);
                     JOptionPane.showMessageDialog(panel, "Registered successfully!");

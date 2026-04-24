@@ -1,7 +1,10 @@
 import dao.*;
 import dao.impl.*;
+import model.Accounts;
 import model.User;
 import service.CashTransfer;
+import service.CheckBalance;
+import service.UserValidator;
 import util.DBConnection;
 
 import javax.swing.*;
@@ -20,26 +23,56 @@ public class TransferMoney {
         this.mainFrame = mainFrame;
         this.user = user;
         btnSend.addActionListener(e -> {
-            try{
-                String recipient = txtNumber.getText();
-                System.out.println(recipient);
-                double amountToSend = Double.parseDouble(txtAmount.getText());
-                Connection conn = DBConnection.getConnection();
-                UserDAO userDAO = new UserDAOImpl(conn);
-                TransactionDAO transactionDAO = new TransactionDAOImpl();
-                AccountDAO accountDAO = new AccountDAOImpl(conn);
-                CashTransfer transfer = ((userID, recipientNumber, senderNumber, amount) -> {
-                    User receiver = userDAO.findUserByNumber(recipientNumber);
-                    accountDAO.updateCash(-amount, user.getId());
-                    accountDAO.updateCash(amount, receiver.getId());
-                    transactionDAO.insertTransaction(-amount,"Send", recipientNumber, senderNumber,userID);
-                    transactionDAO.insertTransaction(amount,"Receive", recipientNumber, senderNumber,receiver.getId());
-                });
-                transfer.cashTransfer(user.getId(),recipient,user.getNumber(), amountToSend);
-                JOptionPane.showMessageDialog(panel,"Transferred " + amountToSend + " to " + recipient);
-            } catch (RuntimeException | SQLException ex) {
+            double amountToSend = 0.0;
+            if (!UserValidator.isValidMobileNumber(txtNumber.getText())) {
+                JOptionPane.showMessageDialog(panel, "Invalid mobile number." +
+                        "\nMobile number must only be composed of 10 digits." +
+                        "\nEx.: 9876543210");
+                return;
+            }
+            String recipient = txtNumber.getText();
+            try {
+                amountToSend = Double.parseDouble(txtAmount.getText());
+                try {
+                    Connection conn = DBConnection.getConnection();
+                    UserDAO userDAO = new UserDAOImpl(conn);
+                    TransactionDAO transactionDAO = new TransactionDAOImpl();
+                    AccountDAO accountDAO = new AccountDAOImpl(conn);
+                    //lambda
+                    CashTransfer transfer = ((userID, recipientNumber, senderNumber, amount) -> {
+                        User receiver = userDAO.findUserByNumber(recipientNumber);
+                        accountDAO.updateCash(-amount, user.getId());
+                        accountDAO.updateCash(amount, receiver.getId());
+                        transactionDAO.insertTransaction(-amount, "Send", recipientNumber, senderNumber, userID);
+                        transactionDAO.insertTransaction(amount, "Receive", recipientNumber, senderNumber, receiver.getId());
+                    });
+                    //validation for checking if amount to send does not exceed remaining balance
+                    CheckBalance checkBalance = (userID -> {
+                        return accountDAO.findAccount(userID);
+                    });
+                    Accounts account = checkBalance.check(user.getId());
+                    if(account.getAmount() < amountToSend){
+                        JOptionPane.showMessageDialog(panel, "Insufficient balance.");
+                        return;
+                    }
+                    //validation for receiver number if existing
+                    if(!userDAO.isExist("users", "number",recipient)){
+                        JOptionPane.showMessageDialog(panel, "User with number = "+ recipient+" does not exist.");
+                        return;
+                    }
+
+                    transfer.cashTransfer(user.getId(), recipient, user.getNumber(), amountToSend);
+                    JOptionPane.showMessageDialog(panel, "Transferred " + amountToSend + " to " + recipient);
+                    mainFrame.showDashboard(user);
+                } catch (RuntimeException | SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(panel, "Input must be a valid amount.");
                 throw new RuntimeException(ex);
             }
+                 
+                
         });
 
 
